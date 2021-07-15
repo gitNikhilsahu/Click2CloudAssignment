@@ -1,21 +1,47 @@
 const initState = {
-  loading: false,
+  cart: [],
+  wishlist: []
 };
 
 const CartReducer = (state:any = initState, action: any) => {
   switch (action.type) {
-    case "LOADING_T": {
+    case "ADD_TO_CART": {
       state = {
         ...state,
-        loading: true
+        cart: [action.payload, ...state.cart]
+      };
+      break;
+    }
+    
+    case "ADD_TO_WISHLIST": {
+      state = {
+        ...state,
+        wishlist: [action.payload, ...state.wishlist]
       };
       break;
     }
 
-    case "LOADING_F": {
+    case "HANDLE_QTY_TO_CART": {
+      const {i,v} = action.payload;
       state = {
         ...state,
-        loading: false
+        cart: state.cart.map((item:any,index:number) => index===i ? {price: item.price, description: item.description, image: item.image, qty: v} : item)
+      };
+      break;
+    }
+
+    case "DELETE_TO_CART": {
+      state = {
+        ...state,
+        cart: state.cart.filter((_item:any, index:any)=>index!==action.payload)
+      };
+      break;
+    }
+
+    case "DELETE_TO_WISHLIST": {
+      state = {
+        ...state,
+        wishlist: state.wishlist.filter((_item:any, index:any)=>index!==action.payload)
       };
       break;
     }
